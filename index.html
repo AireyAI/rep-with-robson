@@ -179,6 +179,9 @@ tailwind.config = {
     display: flex; gap: 4rem; animation: scroll 28s linear infinite;
   }
   @keyframes scroll { to { transform: translateX(-50%); } }
+  @media (max-width: 768px) {
+    .marquee { animation-duration: 16s; }
+  }
 
   /* Section label */
   .eyebrow {

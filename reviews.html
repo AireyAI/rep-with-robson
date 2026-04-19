@@ -159,6 +159,9 @@ tailwind.config = {
   /* Hero marquee */
   .marquee { display: flex; gap: 4rem; animation: scroll 32s linear infinite; }
   @keyframes scroll { to { transform: translateX(-50%); } }
+  @media (max-width: 768px) {
+    .marquee { animation-duration: 18s; }
+  }
 
   /* Back-home nav */
   @media (max-width: 768px) { .desk-nav { display: none; } }
