@@ -10,7 +10,10 @@
   'use strict';
 
   // ─── CONFIG ──────────────────────────────────────────────────────────
-  const BOOKING_WEBHOOK = 'https://aria-production.up.railway.app/api/booking';
+  const BOOKING_WEBHOOK = 'https://aria-chatbot-production-12d0.up.railway.app/api/booking';
+  const OWNER_EMAIL = 'jordanrobson94@outlook.com';
+  const OWNER_NAME  = 'Jord';
+  const SITE_NAME   = 'REP with Robson';
   const OPENING_HOURS = {
     0: null, 1: [8, 20], 2: [8, 17], 3: [8, 20], 4: [8, 18], 5: [8, 18], 6: [8, 12]
   };
@@ -377,19 +380,38 @@
     submitBtn.disabled = true;
     submitTxt.textContent = 'Sending…';
 
+    const name  = overlay.querySelector('#qbName').value.trim();
+    const phone = overlay.querySelector('#qbPhone').value.trim();
+    const email = overlay.querySelector('#qbEmail').value.trim();
+
+    // Human-readable datetime for Aria's email template
+    const dateObj = new Date(dateEl.value + 'T' + timeEl.value);
+    const datetime = dateObj.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) + ' at ' + timeEl.value;
+
+    // Pack service + phone into notes so Jord sees them in the booking email
+    const packedNotes = [
+      `Service: ${svc.value} — ${svc.duration} min, £${svc.price}`,
+      `Phone: ${phone}`,
+      '(Booked via Quick Book popup)'
+    ].join('\n');
+
     const payload = {
-      business: 'REP with Robson',
-      service: svc.value,
-      duration_minutes: svc.duration,
-      price_gbp: svc.price,
-      date: dateEl.value,
-      time: timeEl.value,
-      name: overlay.querySelector('#qbName').value.trim(),
-      phone: overlay.querySelector('#qbPhone').value.trim(),
-      email: overlay.querySelector('#qbEmail').value.trim(),
-      notes: '(via Quick Book popup)',
-      source: 'repwithrobson.co.uk (quick-book)',
-      calendar: 'jordanrobson94@outlook.com'
+      ownerEmail: OWNER_EMAIL,
+      ownerName:  OWNER_NAME,
+      siteName:   SITE_NAME,
+      botName:    OWNER_NAME,
+      page:       'Quick Book popup',
+      name:       name,
+      email:      email,
+      datetime:   datetime,
+      notes:      packedNotes,
+      service:            svc.value,
+      duration_minutes:   svc.duration,
+      price_gbp:          svc.price,
+      date:               dateEl.value,
+      time:               timeEl.value,
+      phone:              phone,
+      source:             'repwithrobson.co.uk (quick-book)'
     };
 
     try {
@@ -404,14 +426,10 @@
       // Fallback — email Jord so booking isn't lost
       const subj = encodeURIComponent(`Booking request — ${payload.service}`);
       const body = encodeURIComponent(
-        `Booking from repwithrobson.co.uk (Quick Book)\n\n` +
-        `Service: ${payload.service} (£${payload.price_gbp})\n` +
-        `Date: ${payload.date}\nTime: ${payload.time}\n` +
-        `Name: ${payload.name}\nPhone: ${payload.phone}\nEmail: ${payload.email}`
+        `Booking from repwithrobson.co.uk (Quick Book)\n\n${packedNotes}\nWhen: ${datetime}\nName: ${name}\nEmail: ${email}`
       );
-      // Open mail client quietly in background
       const a = document.createElement('a');
-      a.href = `mailto:jordanrobson94@outlook.com?subject=${subj}&body=${body}`;
+      a.href = `mailto:${OWNER_EMAIL}?subject=${subj}&body=${body}`;
       a.click();
     }
 

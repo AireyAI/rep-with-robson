@@ -1342,8 +1342,11 @@ const OPENING_HOURS = {
   6: [8, 12]        // Sat
 };
 
-// Aria webhook endpoint — replace with live Aria server URL when deployed
-const BOOKING_WEBHOOK = 'https://aria-production.up.railway.app/api/bookings/repwithrobson';
+// Aria booking endpoint — Aria server handles owner email, calendar event, client confirmation
+const BOOKING_WEBHOOK = 'https://aria-chatbot-production-12d0.up.railway.app/api/booking';
+const OWNER_EMAIL = 'jordanrobson94@outlook.com';
+const OWNER_NAME  = 'Jord';
+const SITE_NAME   = 'REP with Robson';
 
 const dateInput = document.getElementById('bookDate');
 const timeSlotsEl = document.getElementById('timeSlots');
@@ -1453,19 +1456,38 @@ async function submitBooking(e) {
   submitText.textContent = 'Sending…';
   const fd = new FormData(form);
   const svc = getSelectedService();
+
+  // Build a human-readable datetime ("Mon 21 Apr 2026 at 10:30") for the Aria template
+  const dateObj = new Date(fd.get('date') + 'T' + fd.get('time'));
+  const datetime = dateObj.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) + ' at ' + fd.get('time');
+
+  // Pack service + phone into notes so they appear in Jord's booking email
+  const clientNotes = fd.get('notes') || '';
+  const packedNotes = [
+    `Service: ${fd.get('service')} — ${svc.dataset.duration} min, £${svc.dataset.price}`,
+    `Phone: ${fd.get('phone')}`,
+    clientNotes ? `Notes from client: ${clientNotes}` : ''
+  ].filter(Boolean).join('\n');
+
   const payload = {
-    business: 'REP with Robson',
-    service: fd.get('service'),
-    duration_minutes: parseInt(svc.dataset.duration, 10),
-    price_gbp: parseInt(svc.dataset.price, 10),
-    date: fd.get('date'),
-    time: fd.get('time'),
-    name: fd.get('name'),
-    phone: fd.get('phone'),
-    email: fd.get('email'),
-    notes: fd.get('notes') || '',
-    source: 'repwithrobson.co.uk',
-    calendar: 'jordanrobson94@outlook.com'
+    // Aria-required fields
+    ownerEmail: OWNER_EMAIL,
+    ownerName:  OWNER_NAME,
+    siteName:   SITE_NAME,
+    botName:    OWNER_NAME,
+    page:       'Homepage booking form',
+    name:       fd.get('name'),
+    email:      fd.get('email'),
+    datetime:   datetime,
+    notes:      packedNotes,
+    // Preserved for storage + future reporting
+    service:            fd.get('service'),
+    duration_minutes:   parseInt(svc.dataset.duration, 10),
+    price_gbp:          parseInt(svc.dataset.price, 10),
+    date:               fd.get('date'),
+    time:               fd.get('time'),
+    phone:              fd.get('phone'),
+    source:             'repwithrobson.co.uk'
   };
 
   try {
@@ -1478,21 +1500,17 @@ async function submitBooking(e) {
     if (!res.ok) throw new Error('Booking failed');
     showSuccess();
   } catch (err) {
-    // Graceful fallback: open an email with the booking details
+    // Graceful fallback: open an email so the booking isn't lost
     const subject = encodeURIComponent(`Booking request — ${payload.service}`);
     const body = encodeURIComponent(
 `New booking request from repwithrobson.co.uk
 
-Service: ${payload.service} (£${payload.price_gbp})
-Date: ${payload.date}
-Time: ${payload.time}
+${packedNotes}
+When: ${datetime}
 Name: ${payload.name}
-Phone: ${payload.phone}
-Email: ${payload.email}
-Notes: ${payload.notes || '—'}`
+Email: ${payload.email}`
     );
-    window.location.href = `mailto:jordanrobson94@outlook.com?subject=${subject}&body=${body}`;
-    // still show success so the user isn't confused
+    window.location.href = `mailto:${OWNER_EMAIL}?subject=${subject}&body=${body}`;
     showSuccess();
   }
   return false;
