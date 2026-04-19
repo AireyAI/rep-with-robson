@@ -3,6 +3,19 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- First-visit intro: redirect before any paint if the device hasn't seen the intro.
+     Skipped when URL contains ?skipIntro or ?from=intro, on very small screens (phones can opt in separately), or when reduced-motion is requested. -->
+<script>
+  (function () {
+    try {
+      var u = new URL(location.href);
+      if (u.searchParams.has('skipIntro') || u.searchParams.get('from') === 'intro') return;
+      if (localStorage.getItem('rwr_intro_seen') === '1') return;
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      location.replace('intro.html');
+    } catch (e) { /* fail-open: show homepage */ }
+  })();
+</script>
 <title>REP with Robson | Sports Massage & Coaching Carlisle — Jord Robson</title>
 <meta name="description" content="Sports massage, injury treatment and performance coaching in Carlisle with Jord Robson. Recover · Evolve · Perform. 5-star rated, 130+ reviews. Book online." />
 <meta name="theme-color" content="#0B0B0B" />
