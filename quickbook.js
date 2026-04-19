@@ -14,6 +14,14 @@
   const OWNER_EMAIL = 'jordanrobson94@outlook.com';
   const OWNER_NAME  = 'Jord';
   const SITE_NAME   = 'REP with Robson';
+  const BRAND = {
+    brandColor:   '#EC0A7E',
+    brandLogoUrl: 'https://aireyai.github.io/rep-with-robson/brand_assets/logo.jpeg',
+    brandTagline: 'Recover · Evolve · Perform',
+    siteUrl:      'https://aireyai.github.io/rep-with-robson/',
+    location:     '1 Lonsdale Street, Carlisle CA1 1BJ (above Blackfriars Tattoo)',
+    mapUrl:       'https://www.google.com/maps/search/?api=1&query=1+Lonsdale+Street+Carlisle+CA1+1BJ'
+  };
   const OPENING_HOURS = {
     0: null, 1: [8, 20], 2: [8, 17], 3: [8, 20], 4: [8, 18], 5: [8, 18], 6: [8, 12]
   };
@@ -411,7 +419,8 @@
       date:               dateEl.value,
       time:               timeEl.value,
       phone:              phone,
-      source:             'repwithrobson.co.uk (quick-book)'
+      source:             'repwithrobson.co.uk (quick-book)',
+      ...BRAND
     };
 
     try {

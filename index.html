@@ -1347,6 +1347,15 @@ const BOOKING_WEBHOOK = 'https://aria-chatbot-production-12d0.up.railway.app/api
 const OWNER_EMAIL = 'jordanrobson94@outlook.com';
 const OWNER_NAME  = 'Jord';
 const SITE_NAME   = 'REP with Robson';
+// Brand config — shipped with every booking so Aria renders the email in REP with Robson colours, logo and voice
+const BRAND = {
+  brandColor:   '#EC0A7E',
+  brandLogoUrl: 'https://aireyai.github.io/rep-with-robson/brand_assets/logo.jpeg',
+  brandTagline: 'Recover · Evolve · Perform',
+  siteUrl:      'https://aireyai.github.io/rep-with-robson/',
+  location:     '1 Lonsdale Street, Carlisle CA1 1BJ (above Blackfriars Tattoo)',
+  mapUrl:       'https://www.google.com/maps/search/?api=1&query=1+Lonsdale+Street+Carlisle+CA1+1BJ'
+};
 
 const dateInput = document.getElementById('bookDate');
 const timeSlotsEl = document.getElementById('timeSlots');
@@ -1487,7 +1496,8 @@ async function submitBooking(e) {
     date:               fd.get('date'),
     time:               fd.get('time'),
     phone:              fd.get('phone'),
-    source:             'repwithrobson.co.uk'
+    source:             'repwithrobson.co.uk',
+    ...BRAND
   };
 
   try {
