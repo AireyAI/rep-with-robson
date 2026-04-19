@@ -3,14 +3,15 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<!-- First-visit intro: redirect before any paint if the device hasn't seen the intro.
-     Skipped when URL contains ?skipIntro or ?from=intro, on very small screens (phones can opt in separately), or when reduced-motion is requested. -->
+<!-- Session-scoped intro: redirects to the splash on every fresh visit, but skips while the
+     intro hands off back to the homepage in the same tab (sessionStorage flag set by intro.html).
+     Bypassable via ?skipIntro in the URL, and suppressed for users with prefers-reduced-motion. -->
 <script>
   (function () {
     try {
       var u = new URL(location.href);
       if (u.searchParams.has('skipIntro') || u.searchParams.get('from') === 'intro') return;
-      if (localStorage.getItem('rwr_intro_seen') === '1') return;
+      if (sessionStorage.getItem('rwr_intro_seen') === '1') return;
       if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
       location.replace('intro.html');
     } catch (e) { /* fail-open: show homepage */ }
