@@ -20,25 +20,7 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
 
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-tailwind.config = {
-  theme: {
-    extend: {
-      colors: {
-        ink: '#0A0A0A', carbon: '#141414', surface: '#1A1A1A', edge: '#262626',
-        mute: '#9A9A9E', bone: '#EDEDED',
-        pink: { DEFAULT: '#EC0A7E', 600: '#C70869', 400: '#F53A9C', 100: '#FFE1F0' }
-      },
-      fontFamily: {
-        display: ['"Bebas Neue"', 'Impact', 'sans-serif'],
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        mono: ['"JetBrains Mono"', 'monospace']
-      }
-    }
-  }
-}
-</script>
+<link rel="stylesheet" href="dist/styles.css" />
 
 <style>
   :root {
@@ -475,13 +457,19 @@ tailwind.config = {
         </ul>
       </div>
     </div>
-    <div class="pt-8 border-t border-edge flex justify-center text-xs font-mono uppercase tracking-widest text-mute">
+    <div class="pt-8 border-t border-edge flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-mono uppercase tracking-widest text-mute">
       <div>© <span id="year"></span> REP with Robson · Jord Robson</div>
+      <div class="flex items-center gap-5">
+        <a href="privacy.html" class="pink-link">Privacy</a>
+        <a href="terms.html" class="pink-link">Terms</a>
+        <a href="#" onclick="event.preventDefault(); window.RWRShowConsent && window.RWRShowConsent();" class="pink-link">Cookies</a>
+      </div>
     </div>
   </div>
 </footer>
 
 <script src="quickbook.js" defer></script>
+<script src="consent.js" defer></script>
 
 <!-- Floating WhatsApp -->
 <a href="https://wa.me/447376369795" target="_blank" rel="noopener" aria-label="WhatsApp Jord" class="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-[#25D366] flex items-center justify-center shadow-xl hover:scale-110 transition-transform">

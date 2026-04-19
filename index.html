@@ -70,35 +70,8 @@
 <!-- Fonts: Bebas Neue (display condensed) + Inter (body) + JetBrains Mono (data/numbers) -->
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
 
-<!-- Tailwind -->
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-tailwind.config = {
-  theme: {
-    extend: {
-      colors: {
-        ink: '#0A0A0A',
-        carbon: '#141414',
-        surface: '#1A1A1A',
-        edge: '#262626',
-        mute: '#9A9A9E',
-        bone: '#EDEDED',
-        pink: {
-          DEFAULT: '#EC0A7E',
-          600: '#C70869',
-          400: '#F53A9C',
-          100: '#FFE1F0'
-        }
-      },
-      fontFamily: {
-        display: ['"Bebas Neue"', 'Impact', 'sans-serif'],
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        mono: ['"JetBrains Mono"', 'monospace']
-      }
-    }
-  }
-}
-</script>
+<!-- Tailwind (compiled, ~21KB) -->
+<link rel="stylesheet" href="dist/styles.css" />
 
 <style>
   :root {
@@ -221,6 +194,43 @@ tailwind.config = {
     content: ''; position: absolute; inset: 0;
     background: linear-gradient(180deg, transparent 60%, rgba(10,10,10,0.6));
     pointer-events: none;
+  }
+
+  /* FAQ accordion */
+  .faq-list { display: flex; flex-direction: column; gap: 12px; }
+  .faq-item {
+    background: var(--carbon);
+    border: 1px solid var(--edge);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: border-color 220ms ease, background 220ms ease;
+  }
+  .faq-item:hover { border-color: var(--pink); }
+  .faq-item[open] { border-color: var(--pink); background: #181318; }
+  .faq-item summary {
+    list-style: none; cursor: pointer;
+    padding: 22px 26px;
+    display: flex; align-items: center; justify-content: space-between; gap: 20px;
+    font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 600; color: var(--bone);
+  }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary:focus-visible { outline: 2px solid var(--pink); outline-offset: 2px; border-radius: 12px; }
+  .faq-icon {
+    width: 20px; height: 20px; flex-shrink: 0;
+    color: var(--pink);
+    transition: transform 280ms cubic-bezier(.2,.9,.3,1.2);
+  }
+  .faq-item[open] .faq-icon { transform: rotate(135deg); }
+  .faq-item p {
+    padding: 0 26px 24px;
+    color: rgba(237,237,237,0.75);
+    font-size: 15px; line-height: 1.75;
+    animation: faq-reveal 320ms ease-out both;
+  }
+  .faq-item p a { color: var(--pink); }
+  @keyframes faq-reveal {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
   /* Review card */
@@ -387,6 +397,7 @@ tailwind.config = {
       <a href="#about" class="pink-link">About</a>
       <a href="#gallery" class="pink-link">Gallery</a>
       <a href="#reviews" class="pink-link">Reviews</a>
+      <a href="#faq" class="pink-link">FAQ</a>
       <a href="#location" class="pink-link">Location</a>
       <a href="#book" class="btn-pill btn-pink" data-magnetic>Book Now
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14m-6-6l6 6-6 6"/></svg>
@@ -412,6 +423,7 @@ tailwind.config = {
     <a href="#about">About</a>
     <a href="#gallery">Gallery</a>
     <a href="#reviews">Reviews</a>
+    <a href="#faq">FAQ</a>
     <a href="#location">Location</a>
     <a href="#book" class="text-pink">Book Now →</a>
     <div class="mt-auto pt-8 border-t border-edge font-sans text-sm text-mute normal-case tracking-normal">
@@ -862,6 +874,128 @@ tailwind.config = {
 </section>
 
 <!-- ============================================================
+  FAQ
+============================================================ -->
+<section id="faq" class="py-24 md:py-36 bg-ink border-y border-edge">
+  <div class="max-w-[1200px] mx-auto px-6 md:px-10">
+    <div class="grid md:grid-cols-12 gap-10 mb-16 items-end">
+      <div class="md:col-span-7">
+        <div class="eyebrow mb-5" data-reveal="fade-up">FAQ · 05</div>
+        <h2 class="font-display text-6xl md:text-8xl uppercase leading-[0.9]">
+          <span class="block" data-reveal="fade-up">Questions,</span>
+          <span class="block" data-reveal="fade-up" data-reveal-delay="0.1"><span class="text-pink">answered.</span></span>
+        </h2>
+      </div>
+      <div class="md:col-span-5" data-reveal="fade-up" data-reveal-delay="0.2">
+        <p class="text-bone/70 text-lg leading-relaxed">
+          First time seeing Jord? These are the questions most people ask before they book. Anything else, just drop him a message.
+        </p>
+      </div>
+    </div>
+
+    <div class="faq-list" data-stagger-parent>
+      <details class="faq-item" data-stagger-child>
+        <summary>
+          <span>Is sports massage only for athletes?</span>
+          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+        </summary>
+        <p>No — sports massage techniques work brilliantly for anyone with tension, pain, postural issues, or who spends long hours at a desk or on their feet. You don't need to lift weights to benefit.</p>
+      </details>
+
+      <details class="faq-item" data-stagger-child>
+        <summary>
+          <span>What should I wear?</span>
+          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+        </summary>
+        <p>Come in gym gear — shorts and a t-shirt, or comfortable workout clothes. You'll stay clothed during the session except for the specific area being treated, which will be draped with a towel.</p>
+      </details>
+
+      <details class="faq-item" data-stagger-child>
+        <summary>
+          <span>Does it hurt?</span>
+          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+        </summary>
+        <p>It shouldn't be unbearable. There's sometimes a "good pain" when working through tight knots — the kind that feels intense in the moment but brings relief straight after. Jord checks pressure throughout the session. You're in control.</p>
+      </details>
+
+      <details class="faq-item" data-stagger-child>
+        <summary>
+          <span>How often should I come?</span>
+          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+        </summary>
+        <p>Most clients book a maintenance session every 4–6 weeks. If you're training for a race, rehabbing an injury, or lifting seriously, weekly or fortnightly sessions work better. Jord will advise after your first session based on what he finds.</p>
+      </details>
+
+      <details class="faq-item" data-stagger-child>
+        <summary>
+          <span>Do I need a GP referral?</span>
+          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+        </summary>
+        <p>No — you can book directly. If your issue is medical (recent surgery, active disease, pregnancy, open injury), Jord will ask you to check in with your GP or consultant first before starting treatment.</p>
+      </details>
+
+      <details class="faq-item" data-stagger-child>
+        <summary>
+          <span>What's the difference between a Maintenance Massage and an Injury Assessment?</span>
+          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+        </summary>
+        <p><strong class="text-bone">Maintenance Massage</strong> is a full-body sports massage focused on keeping you in good condition between training blocks — tension out, mobility in. <strong class="text-bone">Injury Assessment &amp; Treatment</strong> includes a clinical evaluation of a specific problem area, hands-on treatment (dry needling or cupping where it helps), and a home exercise plan to follow.</p>
+      </details>
+
+      <details class="faq-item" data-stagger-child>
+        <summary>
+          <span>Will cupping leave marks?</span>
+          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+        </summary>
+        <p>Dry cupping can leave circular pink or red marks that usually fade within 3–7 days. They're bruises from the suction — not damage — and they're a sign blood flow is being drawn into tight tissue. If you have an event where you don't want visible marks, let Jord know and he'll adjust the treatment.</p>
+      </details>
+
+      <details class="faq-item" data-stagger-child>
+        <summary>
+          <span>How do I pay?</span>
+          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+        </summary>
+        <p>Card, bank transfer, or cash — payment is taken after your session. Block bookings and gift vouchers coming soon.</p>
+      </details>
+
+      <details class="faq-item" data-stagger-child>
+        <summary>
+          <span>What's the cancellation policy?</span>
+          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+        </summary>
+        <p>Free to cancel or reschedule up to 24 hours before your slot. Cancellations within 24 hours are charged 50% of the session fee. No-shows are charged the full fee — this helps keep the calendar fair for other clients. Full details on the <a href="terms.html" class="pink-link text-pink">terms page</a>.</p>
+      </details>
+
+      <details class="faq-item" data-stagger-child>
+        <summary>
+          <span>Can I book for someone else?</span>
+          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+        </summary>
+        <p>Absolutely — just let Jord know at booking that the session is for someone else, and pass on their details. Gift vouchers coming soon.</p>
+      </details>
+    </div>
+
+    <!-- Still-stuck CTA -->
+    <div class="mt-14 flex flex-col sm:flex-row items-center justify-between gap-6 p-6 md:p-8 bg-carbon border border-edge rounded-2xl" data-reveal="fade-up">
+      <div>
+        <div class="font-display text-3xl md:text-4xl uppercase leading-none mb-2">Still have a question?</div>
+        <p class="text-bone/70 text-sm">Drop a WhatsApp or an email and Jord will reply within the day.</p>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <a href="https://wa.me/447376369795" target="_blank" rel="noopener" class="btn-pill btn-ghost" data-magnetic>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 3.4A11.8 11.8 0 0012.05 0a11.9 11.9 0 00-10.3 17.9L0 24l6.3-1.65A11.87 11.87 0 0012.05 24h.01c6.57 0 11.9-5.33 11.9-11.9 0-3.2-1.23-6.2-3.46-8.7zM12.05 21.9h-.01a9.87 9.87 0 01-5.04-1.38l-.36-.22-3.74.98 1-3.64-.24-.37A9.88 9.88 0 0112.05 2.1c2.65 0 5.14 1.03 7 2.9a9.87 9.87 0 012.9 7c0 5.43-4.42 9.9-9.9 9.9z"/></svg>
+          WhatsApp
+        </a>
+        <a href="mailto:jordanrobson94@outlook.com" class="btn-pill btn-pink" data-magnetic>
+          Email Jord
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14m-6-6l6 6-6 6"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
   BOOKING
 ============================================================ -->
 <section id="book" class="py-24 md:py-36 relative noise overflow-hidden">
@@ -871,7 +1005,7 @@ tailwind.config = {
 
       <!-- Left: pitch -->
       <div class="md:col-span-5" data-reveal="fade-right">
-        <div class="eyebrow mb-5">Book · 05</div>
+        <div class="eyebrow mb-5">Book · 06</div>
         <h2 class="font-display text-6xl md:text-8xl uppercase leading-[0.9] mb-8">
           Reserve<br><span class="text-pink">your slot.</span>
         </h2>
@@ -1030,7 +1164,7 @@ tailwind.config = {
   <div class="max-w-[1440px] mx-auto px-6 md:px-10">
     <div class="grid md:grid-cols-12 gap-10 mb-14 items-end">
       <div class="md:col-span-7">
-        <div class="eyebrow mb-5" data-reveal="fade-up">Find Me · 06</div>
+        <div class="eyebrow mb-5" data-reveal="fade-up">Find Me · 07</div>
         <h2 class="font-display text-6xl md:text-8xl uppercase leading-[0.9]">
           <span class="block" data-reveal="fade-up">Above</span>
           <span class="block text-pink" data-reveal="fade-up" data-reveal-delay="0.1">Blackfriars Tattoo.</span>
@@ -1138,7 +1272,8 @@ tailwind.config = {
           <li><a href="#services" class="pink-link">Services</a></li>
           <li><a href="#about" class="pink-link">About</a></li>
           <li><a href="#gallery" class="pink-link">Gallery</a></li>
-          <li><a href="#reviews" class="pink-link">Reviews</a></li>
+          <li><a href="reviews.html" class="pink-link">Reviews</a></li>
+          <li><a href="#faq" class="pink-link">FAQ</a></li>
           <li><a href="#book" class="pink-link">Book</a></li>
         </ul>
       </div>
@@ -1161,8 +1296,13 @@ tailwind.config = {
         </ul>
       </div>
     </div>
-    <div class="pt-8 border-t border-edge flex justify-center text-xs font-mono uppercase tracking-widest text-mute">
+    <div class="pt-8 border-t border-edge flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-mono uppercase tracking-widest text-mute">
       <div>© <span id="year"></span> REP with Robson · Jord Robson</div>
+      <div class="flex items-center gap-5">
+        <a href="privacy.html" class="pink-link">Privacy</a>
+        <a href="terms.html" class="pink-link">Terms</a>
+        <a href="#" onclick="event.preventDefault(); window.RWRShowConsent && window.RWRShowConsent();" class="pink-link">Cookies</a>
+      </div>
     </div>
   </div>
 </footer>
@@ -1186,6 +1326,7 @@ tailwind.config = {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="animations.js"></script>
 <script src="quickbook.js" defer></script>
+<script src="consent.js" defer></script>
 
 <script>
 // ============================================================

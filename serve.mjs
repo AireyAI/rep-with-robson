@@ -24,7 +24,9 @@ const MIME = {
 };
 
 http.createServer((req, res) => {
-  let urlPath = req.url === '/' ? '/index.html' : req.url;
+  // strip query string + hash so files resolve correctly
+  let urlPath = req.url.split('?')[0].split('#')[0];
+  if (urlPath === '/' || urlPath === '') urlPath = '/index.html';
   urlPath = decodeURIComponent(urlPath);
   const filePath = path.join(__dirname, urlPath);
   const ext = path.extname(filePath).toLowerCase();
